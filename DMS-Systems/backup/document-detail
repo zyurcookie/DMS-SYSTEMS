@@ -1,0 +1,282 @@
+<?php
+session_start();
+include('db.php');
+
+// Restrict access to Admins only
+if (!isset($_SESSION['role']) || $_SESSION['role'] != 'Admin') {
+    header('Location: landing.php');
+    exit();
+}
+
+// Initialize variables for alerts
+$successMessage = "";
+$errorMessage = "";
+
+// Handle account creation
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_account'])) {
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $role = $_POST['role'];
+
+    // Check if email already exists
+    $sql = "SELECT * FROM user WHERE email=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $errorMessage = "Email already exists.";
+    } else {
+        // Insert new user into the database
+        $sql = "INSERT INTO user (email, password, role) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sss", $email, $password, $role);
+
+        if ($stmt->execute()) {
+            $successMessage = "User created successfully!";
+        } else {
+            $errorMessage = "Error creating user.";
+        }
+    }
+}
+
+// Handle approve/decline actions
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && isset($_POST['doc_id'])) {
+    $action = $_POST['action'];
+    $doc_id = $_POST['doc_id'];
+    $comments = $_POST['comments'] ?? '';
+
+    if ($action === 'approve' || $action === 'decline') {
+        $status = $action === 'approve' ? 'Approved' : 'Declined';
+        $sql = "UPDATE document SET status=?, comments=? WHERE doc_id=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssi", $status, $comments, $doc_id);
+        if ($stmt->execute()) {
+            $successMessage = "Document $status successfully.";
+        } else {
+            $errorMessage = "Error updating document status.";
+        }
+    }
+}
+?>
+
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Docu Dashboard</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+ <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <div>Digi Docu</div>
+    <div class="user">
+      <i class="fas fa-user-circle"></i>
+      <span>Dean</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <aside>
+      <div class="profile">
+        <div class="avatar">DN</div>
+        <span>Dean</span>
+      </div>
+      <div class="search-wrapper">
+        <input type="text" placeholder="Search..." />
+        <i class="fas fa-search"></i>
+      </div>
+      <nav>
+        <a href="admin_dashboard.php"><i class="fas fa-chart-line"></i> Dashboard</a>
+        <a href="#" class="active"><i class="fas fa-file-alt"></i> Student Files</a>
+        <a href="#"><i class="fas fa-users"></i> Users</a>
+        <a href="#"><i class="fas fa-tags"></i> Tags</a>
+        <div class="settings">
+          <div><i class="fas fa-cog"></i> Settings</div>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </nav>
+    </aside>
+    </head>
+<body class="bg-blue-100 font-sans text-gray-800 min-h-screen flex flex-col">
+  <!-- Top Navbar -->
+  <header class="bg-blue-700 text-white flex items-center justify-between px-4 h-12 flex-shrink-0">
+    <div class="font-semibold text-sm">Digi Docu</div>
+    <div class="flex items-center space-x-2 text-sm">
+      <i class="fas fa-user-circle"></i>
+      <span>Dean</span>
+    </div>
+  </header>
+
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="bg-blue-200 w-56 flex flex-col p-4 space-y-4 overflow-y-auto flex-shrink-0">
+      <div class="flex items-center space-x-3">
+        <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold">
+          DN
+        </div>
+        <span class="text-blue-900 font-semibold text-sm">Dean</span>
+      </div>
+      <div>
+        <div class="relative text-gray-600">
+          <input
+            type="search"
+            name="search"
+            placeholder="Search..."
+            class="w-full pl-3 pr-8 py-1 rounded border border-gray-300 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <button type="submit" class="absolute right-1 top-1.5 text-gray-500">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+      <nav class="flex flex-col space-y-1 text-sm font-medium text-gray-700">
+        <a href="#" class="flex items-center space-x-2 bg-blue-300 rounded px-2 py-1 text-blue-900 font-semibold">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 px-2 py-1 hover:bg-blue-300 rounded">
+          <i class="fas fa-file-alt"></i>
+          <span>Student Files</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 px-2 py-1 hover:bg-blue-300 rounded">
+          <i class="fas fa-users"></i>
+          <span>Users</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 px-2 py-1 hover:bg-blue-300 rounded">
+          <i class="fas fa-tags"></i>
+          <span>Tags</span>
+        </a>
+        <div class="flex items-center space-x-2 px-2 py-1 cursor-pointer hover:bg-blue-300 rounded select-none">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+          <i class="fas fa-chevron-down ml-auto text-xs"></i>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 overflow-y-auto">
+      <h1 class="text-xl font-semibold mb-6">Student Files</h1>
+
+      <div class="doc-header flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">
+          Document <span class="text-gray-700 font-normal ml-2">John Doe Student File</span>
+        </h1>
+        <div class="buttons flex space-x-3">
+          <button type="button" class="flex items-center space-x-2 bg-indigo-100 text-indigo-800 px-3 py-1 rounded font-semibold hover:bg-indigo-200">
+            <i class="fas fa-download"></i><span>Download Zip</span>
+          </button>
+          <button type="button" class="flex items-center space-x-2 bg-indigo-100 text-indigo-800 px-3 py-1 rounded font-semibold hover:bg-indigo-200">
+            <i class="fas fa-edit"></i><span>Edit</span>
+          </button>
+          <button type="button" class="flex items-center space-x-2 bg-red-100 text-red-700 px-3 py-1 rounded font-semibold hover:bg-red-200">
+            <i class="fas fa-trash-alt"></i><span>Delete</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="content grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <section class="info-panel bg-white rounded-md p-4 shadow-sm space-y-2" aria-label="Document information">
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Document Name:</span>
+            <span>John Doe Student File</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Tags:</span>
+            <span>
+              <span class="inline-block bg-purple-700 text-white px-2 py-0.5 rounded text-[9px] font-semibold">Education</span>
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Description:</span>
+            <span>Student academic and personal documents</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Status:</span>
+            <span class="status bg-yellow-500 text-white">Pending</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Created By:</span>
+            <span>Super Admin</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Created At:</span>
+            <span>04/20/2024 09:30 AM <small class="text-gray-400">(2 days ago)</small></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Last Updated:</span>
+            <span>04/22/2024 02:15 PM <small class="text-gray-400">(Today)</small></span>
+          </div>
+        </section>
+
+        <section class="files-panel bg-white rounded-md p-4 shadow-sm col-span-2" aria-label="Files, Verification, Activity, Permission tabs and content">
+          <nav class="tabs" role="tablist">
+            <button aria-current="page" role="tab" aria-selected="true" tabindex="0" class="border-b-2 border-blue-900 text-blue-900 font-semibold px-4 py-2">Files</button>
+            <button role="tab" aria-selected="false" tabindex="-1" class="text-gray-500 hover:text-gray-700 px-4 py-2">Verification</button>
+            <button role="tab" aria-selected="false" tabindex="-1" class="text-gray-500 hover:text-gray-700 px-4 py-2">Activity</button>
+            <button role="tab" aria-selected="false" tabindex="-1" class="text-gray-500 hover:text-gray-700 px-4 py-2">Permission</button>
+          </nav>
+          <div class="files-grid mt-4" role="tabpanel">
+            <article class="file-card" aria-label="Student ID card file">
+              <div class="image-container">
+                <img src="https://storage.googleapis.com/a1aa/image/cb304ae1-31e8-4989-8ebc-0785ab586bdb.jpg" alt="Student ID card with photo of young man and student details" />
+              </div>
+              <div class="info relative">
+                <span class="uppercase text-blue-900 font-bold">Student ID</span>
+                <span>ID Card</span>
+                <span class="text-xs text-gray-600">2 days ago by Super Admin</span>
+                <i class="fas fa-info-circle absolute right-3 top-2 text-gray-500" title="More info"></i>
+              </div>
+            </article>
+            <article class="file-card" aria-label="Transcript file">
+              <div class="image-container">
+                <img src="https://storage.googleapis.com/a1aa/image/d0345197-68e0-42d9-2543-d679527fad32.jpg" alt="Academic transcript document with grades and courses" />
+              </div>
+              <div class="info relative">
+                <span class="uppercase text-blue-900 font-bold">Transcript</span>
+                <span>Academic Record</span>
+                <span class="text-xs text-gray-600">1 day ago by Dean's</span>
+                <i class="fas fa-info-circle absolute right-3 top-2 text-gray-500" title="More info"></i>
+              </div>
+            </article>
+            <article class="file-card" aria-label="Enrollment certificate file">
+              <div class="image-container">
+                <img src="https://storage.googleapis.com/a1aa/image/59eabc0a-e5fa-4328-5c98-02648aeb27ab.jpg" alt="Enrollment certificate document with official seal" />
+              </div>
+              <div class="info relative">
+                <span class="uppercase text-blue-900 font-bold">Enrollment</span>
+                <span>Certificate</span>
+                <span class="text-xs text-gray-600">3 days ago by Deans</span>
+                <i class="fas fa-info-circle absolute right-3 top-2 text-gray-500" title="More info"></i>
+              </div>
+            </article>
+            <article class="file-card" aria-label="Personal statement file">
+              <div class="image-container bg-blue-900 h-28 flex items-center justify-center">
+                <img src="https://storage.googleapis.com/a1aa/image/93c42d1e-1914-4711-bf4c-7ca7bae80064.jpg" alt="PDF icon white text on blue background representing personal statement document" class="h-22 w-36 object-contain" />
+              </div>
+              <div class="info relative">
+                <span class="uppercase text-blue-900 font-bold">Personal Statement</span>
+                <span>Statement</span>
+                <span class="text-xs text-gray-600">4 days ago by Super Admin</span>
+                <i class="fas fa-info-circle absolute right-3 top-2 text-gray-500" title="More info"></i>
+              </div>
+            </article>
+          </div>
+          <button class="add-files-btn mt-6 bg-blue-900 text-white font-semibold px-4 py-2 rounded hover:bg-blue-800" type="button">+ Add Files</button>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

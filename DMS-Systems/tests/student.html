@@ -1,0 +1,390 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digi Docu - Eligibility & Dashboard</title>
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #bfdbfe; /* blue-200 */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background-color: #1e40af; /* blue-800 */
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    header .student-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    header .student-circle {
+      width: 28px;
+      height: 28px;
+      background-color: #3b82f6; /* blue-500 */
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      user-select: none;
+    }
+
+    main {
+      flex-grow: 1;
+      max-width: 960px;
+      margin: 24px auto;
+      padding: 0 16px 40px;
+      width: 100%;
+    }
+
+    /* ID Input Section */
+    #idInputSection {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    #idInputSection h1 {
+      text-align: center;
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: 16px;
+      color: #1e293b; /* gray-800 */
+    }
+    #idInputSection label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #334155; /* gray-700 */
+    }
+    #idInputSection input[type="text"] {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #cbd5e1; /* gray-300 */
+      border-radius: 6px;
+      outline-offset: 2px;
+      outline-color: transparent;
+      transition: outline-color 0.2s ease;
+    }
+    #idInputSection input[type="text"]:focus {
+      outline-color: #2563eb; /* blue-600 */
+    }
+    #idInputSection button {
+      width: 100%;
+      background-color: #1e40af; /* blue-800 */
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 10px 0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    #idInputSection button:hover {
+      background-color: #1e3a8a; /* darker blue */
+    }
+    #idError {
+      margin-top: 12px;
+      text-align: center;
+      color: #dc2626; /* red-600 */
+      font-weight: 600;
+      display: none;
+    }
+
+    /* Dashboard Section */
+    #dashboardSection {
+      display: none;
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    /* Grid for top two cards */
+    #dashboardSection .top-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+    #dashboardSection .card {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      flex: 1 1 300px;
+      max-width: 460px;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    #dashboardSection .score-box {
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    #dashboardSection .message {
+      font-weight: 600;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+    #dashboardSection .requirements {
+      flex-direction: column;
+    }
+    #dashboardSection .requirements h2 {
+      font-weight: 600;
+      font-size: 18px;
+      text-align: center;
+      margin-bottom: 16px;
+      color: #1e293b; /* gray-800 */
+    }
+    #dashboardSection .requirements ol {
+      font-size: 14px;
+      color: #475569; /* gray-700 */
+      padding-left: 20px;
+      margin: 0;
+    }
+    #dashboardSection .requirements ol li {
+      margin-bottom: 6px;
+    }
+
+    /* Upload Section */
+    #dashboardSection .upload-section {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      max-width: 460px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    #dashboardSection .upload-section h3 {
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #1e293b; /* gray-800 */
+    }
+    #dashboardSection .upload-section p.instruction {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 16px;
+      color: #1e293b;
+    }
+    #dashboardSection .upload-section input[type="file"] {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+    #dashboardSection .upload-section button {
+      width: 100%;
+      background-color: #1e40af;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 10px 0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    #dashboardSection .upload-section button:disabled {
+      background-color: #93c5fd; /* lighter blue */
+      cursor: not-allowed;
+    }
+    #dashboardSection .upload-section p.note {
+      font-size: 10px;
+      color: #64748b; /* gray-500 */
+      margin-top: 8px;
+    }
+
+    /* Status colors */
+    .eligible-score {
+      background-color: #bbf7d0; /* green-200 */
+      color: #15803d; /* green-700 */
+    }
+    .not-eligible-score {
+      background-color: #fecaca; /* red-200 */
+      color: #b91c1c; /* red-600 */
+    }
+    .pending-score {
+      background-color: #fef3c7; /* yellow-200 */
+      color: #a16207; /* yellow-700 */
+    }
+    .eligible-message {
+      color: #15803d;
+    }
+    .not-eligible-message {
+      color: #b91c1c;
+    }
+    .pending-message {
+      color: #a16207;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      #dashboardSection .top-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+      #dashboardSection .card {
+        max-width: 100%;
+      }
+      #dashboardSection .upload-section {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>Digi Docu</div>
+    <div class="student-info">
+      <div class="student-circle">S</div>
+      <div>Student</div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ID Input Section -->
+    <section id="idInputSection">
+      <h1>Check Your Eligibility</h1>
+      <form id="idForm">
+        <label for="studentId">Enter your Student ID</label>
+        <input type="text" id="studentId" name="studentId" placeholder="e.g. r2022022311" required />
+        <button type="submit">Check Eligibility</button>
+      </form>
+      <div id="idError"></div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboardSection">
+      <div class="top-grid">
+        <div class="card">
+          <div id="eligibilityScore" class="score-box"></div>
+          <div id="eligibilityMessage" class="message"></div>
+        </div>
+        <div class="card requirements">
+          <h2>Academic Scholarship Requirements</h2>
+          <ol>
+            <li>Accomplished academic scholarship form (the form is available in the guidance office)</li>
+            <li>2 pcs. Photocopy of Dean's Lister certificate (from previous semester)</li>
+            <li>2 pcs. Photocopy of courses with units and grades (from previous semester)</li>
+            <li>2 pcs. Photocopy of the office receipt or any proof of enrollment</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="upload-section">
+        <h3>Academic Scholarship Request</h3>
+        <p id="uploadInstruction" class="instruction"></p>
+        <form id="uploadForm">
+          <input type="file" id="fileUpload" multiple aria-label="Choose files to upload" disabled />
+          <button type="submit" id="uploadBtn" disabled>Upload</button>
+        </form>
+        <p class="note">Accepted formats: PDF, DOCX, JPG. Max size: 5MB each.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const eligibilityData = {
+      "r2022022311": { score: "85%", status: "eligible", message: "You are eligible for the Dean's List." },
+      "r2023987654": { score: "60%", status: "not eligible", message: "You are not eligible for the Dean's List." },
+      "r2023000000": { score: "75%", status: "pending", message: "Your eligibility is currently pending review." }
+    };
+
+    const idInputSection = document.getElementById('idInputSection');
+    const dashboardSection = document.getElementById('dashboardSection');
+    const idForm = document.getElementById('idForm');
+    const studentIdInput = document.getElementById('studentId');
+    const idError = document.getElementById('idError');
+
+    const eligibilityScore = document.getElementById('eligibilityScore');
+    const eligibilityMessage = document.getElementById('eligibilityMessage');
+    const uploadInstruction = document.getElementById('uploadInstruction');
+    const fileUpload = document.getElementById('fileUpload');
+    const uploadBtn = document.getElementById('uploadBtn');
+
+    idForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const studentId = studentIdInput.value.trim();
+
+      if (eligibilityData[studentId]) {
+        const data = eligibilityData[studentId];
+        idError.style.display = 'none';
+
+        // Show dashboard
+        idInputSection.style.display = 'none';
+        dashboardSection.style.display = 'block';
+
+        // Update eligibility info
+        eligibilityScore.textContent = data.score;
+        eligibilityMessage.textContent = data.message;
+
+        // Reset classes
+        eligibilityScore.className = 'score-box';
+        eligibilityMessage.className = 'message';
+
+        if (data.status === "eligible") {
+          eligibilityScore.classList.add('eligible-score');
+          eligibilityMessage.classList.add('eligible-message');
+          uploadInstruction.textContent = "You are eligible to apply for the academic scholarship. Please upload your documents below.";
+          fileUpload.disabled = false;
+          uploadBtn.disabled = false;
+        } else if (data.status === "not eligible") {
+          eligibilityScore.classList.add('not-eligible-score');
+          eligibilityMessage.classList.add('not-eligible-message');
+          uploadInstruction.textContent = "You are not eligible to apply for the academic scholarship at this time.";
+          fileUpload.disabled = true;
+          uploadBtn.disabled = true;
+        } else if (data.status === "pending") {
+          eligibilityScore.classList.add('pending-score');
+          eligibilityMessage.classList.add('pending-message');
+          uploadInstruction.textContent = "Your application is under review. Please wait for further updates.";
+          fileUpload.disabled = true;
+          uploadBtn.disabled = true;
+        }
+      } else {
+        idError.textContent = "Student ID not found. Please check and try again.";
+        idError.style.display = 'block';
+      }
+    });
+
+    // Dummy upload handler
+    document.getElementById('uploadForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Documents uploaded successfully!');
+      fileUpload.value = "";
+    });
+  </script>
+</body>
+</html>

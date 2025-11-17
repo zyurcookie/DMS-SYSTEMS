@@ -1,0 +1,376 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FEU Roosevelt Dean's List Dashboard</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <style>
+    body {
+      background-color: #e6f0ef;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      color: #4a5568;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      height: calc(100vh - 48px);
+    }
+    main {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgb(67 56 202 / 0.1);
+      margin: 16px;
+    }
+    h1.page-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0;
+      user-select: none;
+      color: #312e81;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 24px;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #f0f6f5;
+      border-radius: 12px;
+      padding: 20px;
+      user-select: none;
+      text-align: center;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+    }
+    .stat-card p.label {
+      font-size: 13px;
+      color: #6b7280;
+      margin: 0 0 8px 0;
+    }
+    .stat-card p.value {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+    }
+    .stat-pending {
+      color: #b45309;
+    }
+    .stat-approved {
+      color: #166534;
+    }
+    .stat-declined {
+      color: #991b1b;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    section {
+      border: 1px solid #a0aec0;
+      border-radius: 0.375rem;
+      background-color: #f0f6f5;
+      padding: 1rem;
+      font-size: 13px;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+    }
+    h3 {
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: #2d3748;
+    }
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      border: 1px solid #a0aec0;
+      border-radius: 0.375rem;
+      background-color: #f0f6f5;
+      padding: 0.5rem 0.75rem;
+      font-size: 13px;
+      margin-bottom: 0.75rem;
+      box-sizing: border-box;
+    }
+    input[type="file"] {
+      cursor: pointer;
+    }
+    button {
+      background-color: #f0f6f5;
+      border: 1px solid #a0aec0;
+      border-radius: 0.375rem;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #e2e8f0;
+    }
+    #eligibilityStatus {
+      font-size: 24px;
+      font-weight: 700;
+      user-select: none;
+      margin-bottom: 0.25rem;
+      color: #4a5568;
+      text-align: center;
+    }
+    #eligibilityText {
+      font-size: 12px;
+      font-weight: 600;
+      user-select: none;
+      color: #4a5568;
+      text-align: center;
+    }
+    .flex-col {
+      display: flex;
+      flex-direction: column;
+    }
+    .flex {
+      display: flex;
+    }
+    .items-center {
+      align-items: center;
+    }
+    .space-x-4 > * + * {
+      margin-left: 1rem;
+    }
+    .space-y-1 > * + * {
+      margin-top: 0.25rem;
+    }
+    .overflow-y-auto {
+      overflow-y: auto;
+    }
+    .max-h-[140px] {
+      max-height: 140px;
+    }
+    .pr-2 {
+      padding-right: 0.5rem;
+    }
+    .scrollbar-thin {
+      scrollbar-width: thin;
+      scrollbar-color: #a0aec0 transparent;
+    }
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 6px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background-color: #a0aec0;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>FEU Roosevelt Dean's List</div>
+    <div class="user">
+      <i class="fas fa-user-circle"></i>
+      <span>Dean</span>
+    </div>
+  </header>
+  <div class="container">
+    <aside>
+      <div class="profile">
+        <div class="avatar">DN</div>
+        <div class="name">Dean</div>
+      </div>
+      <div class="search-container">
+        <input type="search" placeholder="Search..." />
+        <i class="fas fa-search"></i>
+      </div>
+      <nav>
+        <a href="#" class="active"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+        <a href="#"><i class="fas fa-file-alt"></i><span>Student Files</span></a>
+        <a href="#"><i class="fas fa-users"></i><span>Users</span></a>
+        <a href="#"><i class="fas fa-tags"></i><span>Tags</span></a>
+        <div class="settings"><i class="fas fa-cog"></i><span>Settings</span><i class="fas fa-chevron-down"></i></div>
+      </nav>
+    </aside>
+    <main>
+      <h1 class="page-title">Dashboard</h1>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p class="label">Total Student Files</p>
+          <p class="value">320</p>
+        </div>
+        <div class="stat-card">
+          <p class="label">Pending Verifications</p>
+          <p class="value stat-pending">24</p>
+        </div>
+        <div class="stat-card">
+          <p class="label">Approved Files</p>
+          <p class="value stat-approved">280</p>
+        </div>
+        <div class="stat-card">
+          <p class="label">Declined Files</p>
+          <p class="value stat-declined">16</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Quick Upload -->
+        <section>
+          <h3>Quick Upload</h3>
+          <input
+            id="fileName"
+            type="text"
+            placeholder="File name"
+          />
+          <input
+            id="fileInput"
+            type="file"
+          />
+          <button id="uploadBtn" type="button">Upload</button>
+        </section>
+
+        <!-- Eligibility Verification -->
+        <section id="eligibilitySection" class="flex flex-col justify-center items-center">
+          <h3 class="self-start">Eligibility Verification</h3>
+          <div id="eligibilityStatus">78%</div>
+          <div id="eligibilityText">Verified Students</div>
+        </section>
+
+        <!-- Verification Queue -->
+        <section class="flex flex-col overflow-y-auto max-h-[140px] pr-2 scrollbar-thin">
+          <h3>Verification Queue</h3>
+          <input type="text" readonly value="Ron Jacob Rodanilla" />
+          <input type="text" readonly value="Jane Smith" />
+          <input type="text" readonly value="John Doe" />
+        </section>
+
+        <!-- Recent Documents -->
+        <section class="flex flex-col overflow-y-auto max-h-[140px] pr-2 scrollbar-thin">
+          <h3>Recent Documents</h3>
+          <input type="text" readonly value="Student ID - Ron Jacob Rodanilla" />
+          <input type="text" readonly value="Personal Statement - Jane Smith" />
+          <input type="text" readonly value="Transcript - John Doe" />
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const eligibilityStatus = document.getElementById("eligibilityStatus");
+    const eligibilityText = document.getElementById("eligibilityText");
+    const verificationQueue = document.querySelector("section:nth-child(3)");
+    const recentDocuments = document.querySelector("section:nth-child(4)");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const fileNameInput = document.getElementById("fileName");
+    const fileInput = document.getElementById("fileInput");
+
+    let queueStudents = [
+      "Ron Jacob Rodanilla",
+      "Jane Smith",
+      "John Doe",
+    ];
+    let recentDocs = [
+      "Student ID - Ron Jacob Rodanilla",
+      "Personal Statement - Jane Smith",
+      "Transcript - John Doe",
+    ];
+
+    function updateQueueAndDocs() {
+      verificationQueue.querySelectorAll('input[type="text"]').forEach(el => el.remove());
+      queueStudents.forEach((name) => {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.readOnly = true;
+        input.value = name;
+        input.style.cssText = "border:1px solid #a0aec0; border-radius:0.375rem; background:#f0f6f5; padding:0.5rem 0.75rem; font-size:13px; cursor:default; margin-top:0.25rem;";
+        verificationQueue.appendChild(input);
+      });
+
+      recentDocuments.querySelectorAll('input[type="text"]').forEach(el => el.remove());
+      recentDocs.forEach((doc) => {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.readOnly = true;
+        input.value = doc;
+        input.style.cssText = "border:1px solid #a0aec0; border-radius:0.375rem; background:#f0f6f5; padding:0.5rem 0.75rem; font-size:13px; cursor:default; margin-top:0.25rem;";
+        recentDocuments.appendChild(input);
+      });
+    }
+
+    updateQueueAndDocs();
+
+    function checkEligibility(student) {
+      if (
+        student.qpa < 3.5 ||
+        student.hasGradeBelow3 ||
+        !student.isRegularStudent ||
+        !student.tookOnlyCurriculumCourses ||
+        student.hasIncompleteOrDroppedOrFailed ||
+        student.violatedRules ||
+        student.attendance < 80
+      ) {
+        return false;
+      }
+      return true;
+    }
+
+    uploadBtn.addEventListener("click", () => {
+      const fileName = fileNameInput.value.trim();
+      const file = fileInput.files[0];
+      if (!fileName || !file) {
+        alert("Please enter a file name and select a file.");
+        return;
+      }
+
+      // Simulate eligibility check (replace with real logic)
+      const student = {
+        qpa: Math.random() * 2 + 2.5,
+        hasGradeBelow3: Math.random() < 0.2,
+        isRegularStudent: Math.random() > 0.1,
+        tookOnlyCurriculumCourses: Math.random() > 0.1,
+        hasIncompleteOrDroppedOrFailed: Math.random() < 0.1,
+        violatedRules: Math.random() < 0.05,
+        attendance: Math.floor(Math.random() * 40) + 60,
+      };
+
+      const eligible = checkEligibility(student);
+
+      if (eligible) {
+        eligibilityStatus.textContent = "✔ Eligible";
+        eligibilityStatus.style.color = "#276749"; // green-700
+        eligibilityText.textContent = "Student meets eligibility criteria";
+      } else {
+        eligibilityStatus.textContent = "✘ Not Eligible";
+        eligibilityStatus.style.color = "#c53030"; // red-600
+        eligibilityText.textContent = "Student does not meet eligibility criteria";
+      }
+
+      recentDocs.unshift(`${fileName} - Uploaded`);
+      if (recentDocs.length > 10) recentDocs.pop();
+
+      if (!eligible) {
+        queueStudents.unshift(fileName);
+        if (queueStudents.length > 10) queueStudents.pop();
+      }
+
+      updateQueueAndDocs();
+
+      fileNameInput.value = "";
+      fileInput.value = "";
+    });
+  </script>
+</body>
+</html>

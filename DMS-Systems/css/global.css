@@ -1,0 +1,151 @@
+.admin-left-container {
+  display: flex;
+  width: 45%;
+  height: 100%;
+  background-color: #e6ebff;
+}
+
+.admin-right-container {
+  display: flex;
+  width: 55%;
+  height: 100%;
+  padding-right: 15px;
+  background-color: #e6ebff;
+}
+
+.user-left-container {
+  display: flex;
+  width: 35%;
+  height: 100%;
+  background-color: #e6ebff;
+}
+
+.user-right-container {
+  display: flex;
+  width: 65%;
+  height: 100%;
+  padding-right: 15px;
+  background-color: #e6ebff;
+}
+
+.home-left-container {
+  display: flex;
+  width: 40%;
+  height: 100%;
+  background-color: #e6ebff;
+}
+
+.home-right-container {
+  display: flex;
+  width: 60%;
+  height: 100%;
+  padding-right: 15px;
+  background-color: #e6ebff;
+}
+
+.dean-left-container {
+  display: flex;
+  width: 45%;
+  height: 100%;
+  background-color: #e6ebff;
+}
+
+.dean-right-container {
+  display: flex;
+  width: 55%;
+  height: 100%;
+  padding-right: 15px;
+  background-color: #e6ebff;
+}
+
+
+/*Admin Dashboard Sections*/
+.quick-upload,
+.eligibility-verification,
+.student-select,
+/*Users Sections*/
+.user-registration,
+.registered-users,
+.search-user,
+/*Homepage Sections*/
+.home-section,
+/*Dean Sections*/
+.dean-status,
+.dean-requirements,
+.dean-document-list{
+  background: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.eligibility-list ol {
+  padding-left: 20px;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: sans-serif;
+  background-color: #e6ebff;
+}
+
+.layout-wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+aside {
+  width: 240px;
+  /* or your fixed sidebar width */
+  flex-shrink: 0;
+}
+
+.content-area {
+  flex-grow: 1;
+  padding-left: 15px;
+  padding-top: 15px;
+  overflow-y: auto;
+  background-color: #e6ebff;
+}
+
+.alert {
+  position: relative;
+  z-index: 1050;
+  /* Ensure it sits above other content */
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 15px;
+  background-color: #e6ebff;
+}
+
+/* Custom Progress Bar Styles */
+.progress {
+  width: 100%;
+  height: 30px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  transition: width 0.5s ease-in-out;
+  background-color: #28a745;  /* Green color for approved status */
+  text-align: center;
+  line-height: 30px;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+}
