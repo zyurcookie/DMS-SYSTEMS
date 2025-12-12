@@ -354,12 +354,7 @@ $user_initial = substr($user_name, 0, 1);
       text-decoration: none;
       font-weight: 600;
     }
-    .quick-actions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
+   
     .action-card {
       background: #f7fafc;
       border: 2px solid #e2e8f0;
@@ -503,29 +498,7 @@ $user_initial = substr($user_name, 0, 1);
         </div>
       </div>
       
-      <!-- Quick Actions -->
-      <div class="content-card" style="margin-bottom: 1.5rem;">
-  <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
-
-  <div class="quick-actions">
-    <a href="registrar_deans_list.php?action=generate" class="action-card">
-      <i class="fas fa-star"></i>
-      <h3>Generate Eligibility</h3>
-    </a>
-    <a href="registrar_transcripts.php?action=generate" class="action-card">
-      <i class="fas fa-file-pdf"></i>
-      <h3>Generate TOR</h3>
-    </a>
-    <a href="registrar_students.php?action=search" class="action-card">
-      <i class="fas fa-search"></i>
-      <h3>Search Student</h3>
-    </a>
-    <a href="registrar_reports.php" class="action-card">
-      <i class="fas fa-chart-bar"></i>
-      <h3>View Reports</h3>
-    </a>
-  </div>
-</div>
+   
       
       <div class="content-row">
         <div class="content-card">
@@ -559,66 +532,7 @@ $user_initial = substr($user_name, 0, 1);
             </tbody>
           </table>
         </div>
-        
-        <div>
-          <div class="content-card" style="margin-bottom: 1.5rem;">
-            <h2><i class="fas fa-layer-group"></i> By Year Level</h2>
-            <div class="chart-container">
-              <?php 
-              $year_level_data->data_seek(0);
-              $max_count = 0;
-              $year_data = [];
-              while($row = $year_level_data->fetch_assoc()) {
-                $year_data[] = $row;
-                if($row['count'] > $max_count) $max_count = $row['count'];
-              }
-              foreach($year_data as $data): 
-                $percentage = ($data['count'] / $max_count) * 100;
-              ?>
-              <div class="chart-bar">
-                <div class="chart-label"><?= htmlspecialchars($data['year_level']) ?></div>
-                <div class="chart-bar-bg">
-                  <div class="chart-bar-fill" style="width: <?= $percentage ?>%">
-                    <?= $data['count'] ?>
-                  </div>
-                </div>
-              </div>
-              <?php endforeach; ?>
-            </div>
-          </div>
-          
-          <div class="content-card">
-            <h2><i class="fas fa-graduation-cap"></i> Top Courses</h2>
-            <div class="chart-container">
-              <?php 
-              $course_data->data_seek(0);
-              $max_count = 0;
-              $course_array = [];
-              while($row = $course_data->fetch_assoc()) {
-                $course_array[] = $row;
-                if($row['count'] > $max_count) $max_count = $row['count'];
-              }
-              $displayed = 0;
-              foreach($course_array as $data): 
-                if($displayed >= 5) break;
-                $percentage = ($data['count'] / $max_count) * 100;
-                $displayed++;
-              ?>
-              <div class="chart-bar">
-                <div class="chart-label" style="width: 180px; font-size: 0.75rem;">
-                  <?= htmlspecialchars(substr($data['course'], 0, 25)) ?>
-                </div>
-                <div class="chart-bar-bg">
-                  <div class="chart-bar-fill" style="width: <?= $percentage ?>%">
-                    <?= $data['count'] ?>
-                  </div>
-                </div>
-              </div>
-              <?php endforeach; ?>
-            </div>
-          </div>
-        </div>
-      </div>
+    
       
       <!-- Recent Activity Footer -->
       <div class="content-card">
@@ -650,3 +564,4 @@ $user_initial = substr($user_name, 0, 1);
   </div>
 </body>
 </html>
+
