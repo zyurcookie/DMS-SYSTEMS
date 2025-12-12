@@ -374,13 +374,14 @@ $gpa_threshold = 3.5; // This should be configurable
   <div class="container">
     <aside class="sidebar">
       <nav>
-        <a href="registrar_dashboard.php" class="nav-item">
+        <a href="registrar_dashboard.php" class="nav-item active">
           <i class="fas fa-chart-line"></i> Dashboard
         </a>
         <a href="registrar_students.php" class="nav-item">
           <i class="fas fa-user-graduate"></i> Student Records
         </a>
-        <a href="registrar_deans_list.php" class="nav-item active">
+
+        <a href="registrar_deans_list.php" class="nav-item">
           <i class="fas fa-star"></i> Dean's List Prep
         </a>
         <a href="registrar_transcripts.php" class="nav-item">
@@ -395,6 +396,8 @@ $gpa_threshold = 3.5; // This should be configurable
         <a href="registrar_documents.php" class="nav-item">
           <i class="fas fa-folder-open"></i> Documents
         </a>
+        <a href="registrar_bulk_import.php" class="nav-item">
+          <i class="fas fa-file-import"></i> Bulk Import
       </nav>
     </aside>
     
