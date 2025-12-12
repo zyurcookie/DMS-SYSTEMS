@@ -455,12 +455,13 @@ $stats = $conn->query($stats_sql)->fetch_assoc();
   <div class="container">
     <aside class="sidebar">
       <nav>
-        <a href="registrar_dashboard.php" class="nav-item">
+        <a href="registrar_dashboard.php" class="nav-item active">
           <i class="fas fa-chart-line"></i> Dashboard
         </a>
         <a href="registrar_students.php" class="nav-item">
           <i class="fas fa-user-graduate"></i> Student Records
         </a>
+
         <a href="registrar_deans_list.php" class="nav-item">
           <i class="fas fa-star"></i> Dean's List Prep
         </a>
@@ -473,9 +474,11 @@ $stats = $conn->query($stats_sql)->fetch_assoc();
         <a href="registrar_reports.php" class="nav-item">
           <i class="fas fa-chart-bar"></i> Reports
         </a>
-        <a href="registrar_documents.php" class="nav-item active">
+        <a href="registrar_documents.php" class="nav-item">
           <i class="fas fa-folder-open"></i> Documents
         </a>
+        <a href="registrar_bulk_import.php" class="nav-item">
+          <i class="fas fa-file-import"></i> Bulk Import
       </nav>
     </aside>
     
