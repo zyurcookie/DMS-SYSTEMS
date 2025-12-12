@@ -304,21 +304,16 @@ $avg_gpa = 0; // Calculate average
     </div>
   </div>
   
-  <div class="container">
+ <div class="container">
     <aside class="sidebar">
       <nav>
-        <a href="registrar_dashboard.php" class="nav-item">
+        <a href="registrar_dashboard.php" class="nav-item active">
           <i class="fas fa-chart-line"></i> Dashboard
         </a>
         <a href="registrar_students.php" class="nav-item">
           <i class="fas fa-user-graduate"></i> Student Records
         </a>
-        <a href="registrar_enrollments.php" class="nav-item">
-          <i class="fas fa-clipboard-list"></i> Enrollment
-        </a>
-        <a href="registrar_grades.php" class="nav-item active">
-          <i class="fas fa-file-alt"></i> Grade Management
-        </a>
+
         <a href="registrar_deans_list.php" class="nav-item">
           <i class="fas fa-star"></i> Dean's List Prep
         </a>
@@ -334,6 +329,8 @@ $avg_gpa = 0; // Calculate average
         <a href="registrar_documents.php" class="nav-item">
           <i class="fas fa-folder-open"></i> Documents
         </a>
+        <a href="registrar_bulk_import.php" class="nav-item">
+          <i class="fas fa-file-import"></i> Bulk Import
       </nav>
     </aside>
     
